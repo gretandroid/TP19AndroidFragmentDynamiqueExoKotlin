@@ -12,36 +12,31 @@ import education.cccp.mobile.fragment.controller.PersonDao.findOneById
 
 
 class EditFragment : Fragment() {
-    private var firstNameText: EditText? = null
-    private var lastNameText: EditText? = null
-    private var dobText: EditText? = null
+    private lateinit var firstNameText: EditText
+    private lateinit var lastNameText: EditText
+    private lateinit var dobText: EditText
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(
-            fragment_edit,
-            container,
-            false
-        )
-        firstNameText = view.findViewById(firstNameEditText)
-        lastNameText = view.findViewById(lastNameEditText)
-        dobText = view.findViewById(dobEditText)
-        return view
+    ): View? = inflater.inflate(
+        fragment_edit,
+        container,
+        false
+    ).apply {
+        firstNameText = findViewById(firstNameEditText)
+        lastNameText = findViewById(lastNameEditText)
+        dobText = findViewById(dobEditText)
     }
 
-    fun received(id: Int) {
-        val person = findOneById(id)
-        firstNameText!!.setText(person!!.firstName)
-        lastNameText!!.setText(person.lastName)
-        dobText!!.setText(person.dob.toString())
+    fun received(id: Int) = findOneById(id)?.apply {
+        firstNameText.setText(firstName)
+        lastNameText.setText(lastName)
+        dobText.setText(dob.toString())
     }
 
-    override fun onStart() {
-        super.onStart()
-        val args = arguments
-        val personId = args!!.getInt("personId")
-        received(personId)
+    override fun onStart() = super.onStart().also {
+        received(requireArguments().getInt("personId"))
     }
 }

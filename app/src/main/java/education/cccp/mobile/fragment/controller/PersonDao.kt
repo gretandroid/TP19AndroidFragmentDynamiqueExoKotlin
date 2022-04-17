@@ -32,10 +32,10 @@ object PersonDao {
             )
         )
     }
-    val all get() = PERSON_ENTITIES
+    val all: List<PersonEntity> get() = PERSON_ENTITIES
 
     fun findOneById(id: Int): PersonEntity? =
-        PERSON_ENTITIES.firstOrNull { it.id == id }
+        all.firstOrNull { it.id == id }
 
-    fun count(): Int = PERSON_ENTITIES.size
+    fun count(): Int = all.size
 }

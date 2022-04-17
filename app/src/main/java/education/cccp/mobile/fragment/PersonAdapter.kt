@@ -1,10 +1,12 @@
 package education.cccp.mobile.fragment
 
-import android.view.LayoutInflater
+import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import education.cccp.mobile.fragment.R.id.*
 import education.cccp.mobile.fragment.R.layout.person_row
 import education.cccp.mobile.fragment.model.PersonEntity
 
@@ -16,44 +18,34 @@ class PersonAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PersonViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view: View = inflater.inflate(
+    ): PersonViewHolder = PersonViewHolder(
+        from(parent.context).inflate(
             person_row,
             parent,
             false
         )
-        return PersonViewHolder(view)
-    }
+    )
 
     override fun onBindViewHolder(
         holder: PersonViewHolder,
         position: Int
     ) {
-        holder.firstNameRow.text = persons[position].firstName
-        holder.lastNameRow.text = persons[position].lastName
-        holder.dobRow.text = persons[position].dob.toString()
-        holder.itemView.setOnClickListener { view: View? ->
-            onItemEvent.onRetrievePersonId(
-                persons[position].id
-            )
+        holder.apply {
+            firstNameRow.text = persons[position].firstName
+            lastNameRow.text = persons[position].lastName
+            dobRow.text = persons[position].dob.toString()
+            itemView.setOnClickListener {
+                onItemEvent.onRetrievePersonId(persons[position].id)
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return persons.size
-    }
+    override fun getItemCount(): Int = persons.size
 
-    inner class PersonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val firstNameRow: TextView
-        val lastNameRow: TextView
-        val dobRow: TextView
-
-        init {
-            firstNameRow = itemView.findViewById(R.id.firstNameTextViewRow)
-            lastNameRow = itemView.findViewById(R.id.lastNameTextViewRow)
-            dobRow = itemView.findViewById(R.id.dobTextViewRow)
-        }
+    inner class PersonViewHolder(itemView: View) : ViewHolder(itemView) {
+        val firstNameRow: TextView by lazy { itemView.findViewById(firstNameTextViewRow) }
+        val lastNameRow: TextView by lazy { itemView.findViewById(lastNameTextViewRow) }
+        val dobRow: TextView by lazy { itemView.findViewById(dobTextViewRow) }
     }
 
     interface OnItemEvent {
